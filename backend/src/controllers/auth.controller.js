@@ -1,41 +1,47 @@
-const db = require('../config/conexion_db')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const db = require('../config/conexion_db');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 class AuthController {
-    async login(req, res){
-        const { email, password} = req.body;
+    async login(req, res) {
+        const { email, password } = req.body;
 
-        try{
-
-            //Buscar usuario por email
+        try {
+            // Buscar usuario por email
             const [usuarios] = await db.query('SELECT * FROM usuarios WHERE email = ?', [email]);
 
-            if(usuarios.length === 0) {
-                return res.status(401).json({ error: ''});
+            if (usuarios.length === 0) {
+                return res.status(401).json({ error: 'Usuario no encontrado' });
             }
 
             const usuario = usuarios[0];
 
             // Verificar contraseña con bcrypt
             const esValida = await bcrypt.compare(password, usuario.clave);
-            if(!esValida){
-                return res.status(401).json({ error: 'Contraseña incorrecta'})
+            if (!esValida) {
+                return res.status(401).json({ error: 'Contraseña incorrecta' });
             }
 
-            //Obtener rol y permisos del usuario
+            // Obtener rol y permisos del usuario
             const [rolDatos] = await db.query(
                 `SELECT r.nombre AS rol, p.nombre AS permiso
-                FROM roles r
-                JOIN rol_permiso rp ON r.id_rol = rp.id_rol
-                JOIN permisos p ON rp.permiso_id = p.id_permiso
-                WHERE r.idf_rol = ?`,
+                 FROM roles r
+                 JOIN rol_permiso rp ON r.id_rol = rp.id_rol
+                 JOIN permisos p ON rp.permiso_id = p.id_permiso
+                 WHERE r.id_rol = ?`,
                 [usuario.id_rol]
+            );
+
+            // Generar JWT
+            const token = jwt.sign(
+                { id: usuario.id_usuario, rol: usuario.id_rol },
+                'secreto_super_seguro',
+                { expiresIn: '2h' }
             );
 
             res.json({
                 mensaje: 'Inicio de sesión exitoso',
-                tokne,
+                token,
                 usuario: {
                     id: usuario.id_usuario,
                     nombre: usuario.nombre,
@@ -45,9 +51,9 @@ class AuthController {
                 }
             });
 
-        }catch{error}{
+        } catch (error) {
             console.error(error);
-            res.status(500).json({ error: 'Error en el servidor'});
+            res.status(500).json({ error: 'Error en el servidor' });
         }
     }
 }
