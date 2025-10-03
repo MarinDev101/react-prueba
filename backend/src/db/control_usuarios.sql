@@ -43,10 +43,10 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 
 -- Asignar permisos al rol administrador (id_rol = 1)
 INSERT INTO rol_permiso (id_rol, permiso_id) VALUES
-(1, 1), --crear
-(1, 2), --leer
-(1, 3), --actualizar
-(1,4); --eliminar
+(1, 1), -- crear
+(1, 2), -- leer
+(1, 3), -- actualizar
+(1,4); -- eliminar
 
 -- Asignar permisos al rol empleado (id_rol = 2), solo leer
 INSERT INTO rol_permiso (id_rol, permiso_id) VALUES
