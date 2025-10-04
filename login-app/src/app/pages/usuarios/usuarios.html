@@ -1,1 +1,94 @@
-<p>usuarios works!</p>
+<div class="header-usuarios">
+  <h2>Gestión de Usuarios</h2>
+  <button class="btn-agregar" (click)="abrirModal()">+ Agregar nuevo usuario</button>
+</div>
+
+<!-- Tabla -->
+<table class="usuarios-table" *ngIf="usuarios.length > 0">
+  <thead>
+    <tr>
+      <th>Usuario</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Permisos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios" (click)="abrirModal(usuario)">
+      <td>
+        <div class="usuario-info">
+          <strong>{{ usuario.nombre }}</strong><br>
+        </div>
+      </td>
+      <td>{{ usuario.email }}</td>
+      <td>
+        <span class="rol-badge" [ngClass]="(usuario.rol || 'sin-rol').toLowerCase()">
+          {{ usuario.rol || 'Sin rol' }}
+        </span>
+      </td>
+      <td>{{ usuario.permisos }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="mostrarModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 *ngIf="!modoEdicion">Crear Nuevo Usuario</h3>
+      <h3 *ngIf="modoEdicion">Editar Usuario</h3>
+      <button class="close-btn" (click)="cerrarModal()">×</button>
+    </div>
+
+    <form (ngSubmit)="modoEdicion ? actualizarUsuario() : registrarUsuario()">
+      <div class="form-grid">
+        <div>
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="usuarioForm.nombre" name="nombre" required />
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input type="email" [(ngModel)]="usuarioForm.email" name="email" required />
+        </div>
+
+        <div *ngIf="!modoEdicion">
+          <label>Contraseña</label>
+          <input type="password" [(ngModel)]="usuarioForm.clave" name="clave" required />
+        </div>
+
+        <div *ngIf="modoEdicion">
+          <label>Nueva Contraseña (opcional)</label>
+          <input type="password" [(ngModel)]="usuarioForm.clave" name="clave" />
+        </div>
+
+        <div class="full-width">
+          <label>Rol</label>
+          <select [(ngModel)]="usuarioForm.id_rol" name="id_rol" (change)="cargarPermisos()" required>
+            <option value="">Selecciona un rol</option>
+            <option *ngFor="let rol of roles" [value]="rol.id_rol">{{ rol.nombre }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Permisos dinámicos -->
+      <div class="permisos" *ngIf="permisosRolSeleccionado.length > 0">
+        <label>Permisos del Rol</label>
+        <ul class="permisos-lista">
+          <li *ngFor="let permiso of permisosRolSeleccionado">{{ permiso }}</li>
+        </ul>
+      </div>
+
+      <!-- Botones -->
+      <div class="modal-actions">
+        <button type="submit" class="btn-submit">
+          {{ modoEdicion ? 'Guardar Cambios' : 'Crear Usuario' }}
+        </button>
+
+        <button *ngIf="modoEdicion" type="button" class="btn-delete" (click)="eliminarUsuario()">
+          Eliminar Usuario
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
