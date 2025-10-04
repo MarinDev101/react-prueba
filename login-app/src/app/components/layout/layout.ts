@@ -8,16 +8,18 @@ import { AuthService } from '../../services/auths/auth';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './layout.html',
-  styleUrl: './layout.css'
+  styleUrls: ['./layout.css']
 })
 export class Layout {
-  Usuarios: any;
+  usuario: any;
 
-  constructor(private auth: AuthService, private router: Router) {
-    this.usuario = this.auth.obtenerUsuario();
+  // Se inyecta el servicio Athservices y Router
+  constructor(private auth:  AuthService, private router: Router) {
+    this.usuario = this.auth.obtenerUsuario(); // Obtiene el usuario guardado en el localstorage
   }
+
   cerrarSesion() {
     this.auth.cerrarSesion();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']); // Redirige al login al cerrar sesion
   }
 }
