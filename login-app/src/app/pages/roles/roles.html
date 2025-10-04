@@ -1,1 +1,100 @@
-<p>roles works!</p>
+<!-- Roles.html -->
+<div class="roles-container">
+  <!-- Título y botón crear -->
+  <div class="titulo-container">
+    <h2 class="titulo"><i class="bi bi-shield-lock"></i> Lista de Roles</h2>
+    <button class="btn-add" (click)="abrirModalCrear()">Crear Rol</button>
+    <!-- La funcionalidad (click) sirve para llamar una función que está en el TS -->
+  </div>
+
+  <!-- Cards de roles -->
+  <div class="rol-card" *ngFor="let rol of roles">
+    <!-- El *ngFor sirve para iterar datos -->
+    <div class="card-header">
+      <h3 class="rol-nombre">{{ rol.nombre }}</h3>
+      <p class="rol-descripcion">
+        {{ rol.descripcion || 'Sin descripción asignada' }}
+      </p>
+    </div>
+
+    <div class="rol-acciones">
+      <button (click)="abrirModalEditar(rol)" class="btn-icon">✏️</button>
+      <button (click)="eliminarRol(rol.id_rol)" class="btn-icon eliminar">🗑️</button>
+    </div>
+
+    <!-- Usuarios asignados -->
+    <div class="rol-usuarios">
+      <h4>Usuarios asignados</h4>
+      <ul class="lista-usuarios">
+        <li *ngFor="let usuario of rol.usuariosAsignados">
+          {{ usuario.nombre }}
+          <!-- Esto se llama interpolación, sirve para agregar un dato que viene de un objeto del backend -->
+        </li>
+      </ul>
+    </div>
+
+    <!-- Permisos -->
+    <div class="rol-permisos">
+      <h4>Permisos</h4>
+      <ul class="permiso-list">
+        <li *ngFor="let permiso of rol.permisos">
+          {{ permiso.nombre }}
+          <!-- Interpolación de Angular -->
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MODAL CREAR/EDITAR -->
+  <div class="modal-backdrop" *ngIf="mostrarModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>{{ editando ? 'Editar Rol' : 'Crear Nuevo Rol' }}</h2>
+        <button class="btn-close" (click)="cerrarModal()">X</button>
+      </div>
+
+      <div class="modal-body">
+        <p>
+          {{ editando
+            ? 'Modifica los detalles y permisos del rol seleccionado.'
+            : 'Define un nuevo rol con sus permisos correspondientes para asignar a los usuarios.'
+          }}
+        </p>
+
+        <form (ngSubmit)="guardarCambio()" class="modal-form">
+          <!-- ngSubmit sirve para enviar el formulario -->
+
+          <!-- Nombre del Rol -->
+          <label>Nombre del Rol</label>
+          <input
+            [(ngModel)]="rolSeleccionado.nombre"
+            name="nombre"
+            required
+            type="text"
+          />
+          <!-- ngModel sirve para enlazar el valor del input con una variable en el TS -->
+
+          <!-- Permisos -->
+          <div class="permiso-list">
+            <h3>Permisos del Rol</h3>
+            <div *ngFor="let permiso of permisosDisponibles" class="permiso-item">
+              <input
+                type="checkbox"
+                [checked]="rolSeleccionado.permisos.includes(permiso.id_permiso)"
+                (change)="togglePermiso(permiso.id_permiso)"
+              />
+              <!-- checked sirve para marcar el checkbox si el permiso ya está en el rol seleccionado -->
+              <!-- (change) sirve para llamar una función cuando se cambia el estado del checkbox -->
+              <strong>{{ permiso.nombre }}</strong>
+              <p>{{ permiso.descripcion }}</p>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            {{ editando ? 'Actualizar Rol' : 'Crear Rol' }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
