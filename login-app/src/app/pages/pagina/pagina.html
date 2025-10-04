@@ -1,1 +1,11 @@
-<p>pagina works!</p>
+<div class="inicio-container">
+  <div class="card">
+    <h2>Bienvenido, {{ usuario?.nombre }}</h2>
+    <p><strong>Rol:</strong> {{ usuario?.rol }}</p>
+    <p><strong>Permisos:</strong></p>
+    <ul>
+      <li *ngFor="let permiso of usuario?.permisos">{{ permiso }}</li>
+    </ul>
+    <button class="logout-btn" (click)="cerrarSesion()">Cerrar Sesión</button>
+  </div>
+</div>
