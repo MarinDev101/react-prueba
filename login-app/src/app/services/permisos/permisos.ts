@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class PermisosService {
 
-  private apiUrl = 'http://localhost:300/api/permisos';
+  private apiUrl = 'http://localhost:3000/api/permisos';
 
   constructor(private http: HttpClient) {}
 

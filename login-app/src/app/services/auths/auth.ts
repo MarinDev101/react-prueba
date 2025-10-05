@@ -9,7 +9,7 @@ export class AuthService {
 
   // LOS SERVICES SIRVEN PARA HACER PETICIONES AL BACKEND
 
-  private apiUrl = 'http://localhost:300/api/auth'; // Tu backend
+  private apiUrl = 'http://localhost:3000/api/auth'; // Tu backend
   private claveToken = 'token'; //clave para almacenar el token en localstorage
   private claveUsuario = 'usuario' //Clave para almacenar el usuario en localstorage
 

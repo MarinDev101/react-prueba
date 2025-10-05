@@ -9,7 +9,7 @@ import { PermisosService } from '../../services/permisos/permisos';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './roles.html',
-  styleUrl: './roles.css'
+  styleUrls: ['./roles.css']
 })
 export class RolesComponent {
   // Variables para manejar los roles y permisos

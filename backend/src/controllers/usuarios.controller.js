@@ -14,7 +14,7 @@ class UsuariosController {
                 LEFT JOIN permisos p ON rp.permiso_id = p.id_permiso
                 GROUP BY u.id_usuario, u.nombre, u.email, r.nombre`
             );
-            res.json({ usuarios });
+            res.json(usuarios);
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Error al obtener usuarios' });

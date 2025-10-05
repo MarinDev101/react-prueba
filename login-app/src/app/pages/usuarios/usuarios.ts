@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UsuariosService } from '../../../services/usuarios/usuarios';
-import { RolesService } from '../../../services/roles/roles';
+import { UsuariosService } from '../../services/usuarios/usuarios';
+import { RolesService } from '../../services/roles/roles';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './usuarios.html',
-  styleUrl: './usuarios.css'
+  styleUrls: ['./usuarios.css']
 })
 export class UsuariosComponent {
   usuarios: any[] = [];
